@@ -6,6 +6,7 @@ class WheelOfFortune {
     this.isSpinning = false
     this.rotation = 0
     this.templates = {
+      simnao: ['Sim', 'Não'],
       pizzas: ['Margherita', 'Pepperoni', 'Quatro Queijos', 'Calabresa', 'Portuguesa', 'Frango com Catupiry', 'Napolitana', 'Bacon'],
       sorvetes: ['Chocolate', 'Morango', 'Baunilha', 'Flocos', 'Creme', 'Limão', 'Maracujá', 'Açaí'],
       cores: ['Vermelho', 'Azul', 'Verde', 'Amarelo', 'Roxo', 'Laranja', 'Rosa', 'Preto', 'Branco'],
@@ -43,6 +44,7 @@ class WheelOfFortune {
             <div class="templates-section">
               <h3>Sugestões:</h3>
               <div class="templates-container">
+                <button class="template-btn" data-template="simnao">✅ Sim / Não</button>
                 <button class="template-btn" data-template="pizzas">🍕 Pizzas</button>
                 <button class="template-btn" data-template="sorvetes">🍦 Sorvetes</button>
                 <button class="template-btn" data-template="cores">🎨 Cores</button>
