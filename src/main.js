@@ -19,6 +19,7 @@ class WheelOfFortune {
   init() {
     document.querySelector('#app').innerHTML = `
       <div class="container">
+        <h1>vc que sabe</h1>
         <div id="result" class="result hidden"></div>
         
         <div class="main-content">
