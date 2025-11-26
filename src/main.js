@@ -10,7 +10,8 @@ class WheelOfFortune {
       sorvetes: ['Chocolate', 'Morango', 'Baunilha', 'Flocos', 'Creme', 'Limão', 'Maracujá', 'Açaí'],
       cores: ['Vermelho', 'Azul', 'Verde', 'Amarelo', 'Roxo', 'Laranja', 'Rosa', 'Preto', 'Branco'],
       lugares: ['Praia', 'Montanha', 'Cidade', 'Floresta', 'Deserto', 'Ilha', 'Campo', 'Parque'],
-      comidas: ['Pizza', 'Hambúrguer', 'Sushi', 'Taco', 'Lasanha', 'Churrasco', 'Pastel', 'Açaí', 'Coxinha', 'Batata Frita']
+      comidas: ['Pizza', 'Hambúrguer', 'Sushi', 'Taco', 'Lasanha', 'Churrasco', 'Pastel', 'Açaí', 'Coxinha', 'Batata Frita'],
+      filmes: ['Ação', 'Aventura', 'Comédia', 'Drama', 'Terror', 'Ficção Científica', 'Romance', 'Suspense', 'Animação', 'Documentário', 'Fantasia', 'Crime']
     }
     this.init()
   }
@@ -46,6 +47,7 @@ class WheelOfFortune {
                 <button class="template-btn" data-template="cores">🎨 Cores</button>
                 <button class="template-btn" data-template="lugares">🌍 Lugares</button>
                 <button class="template-btn" data-template="comidas">🍽️ Comidas</button>
+                <button class="template-btn" data-template="filmes">🎬 Filmes</button>
               </div>
             </div>
 
