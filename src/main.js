@@ -1,4 +1,5 @@
 import './style.css'
+import logoImage from './assets/vcquesabelogo.png'
 
 class WheelOfFortune {
   constructor() {
@@ -30,7 +31,7 @@ class WheelOfFortune {
       
       <div class="container">
         <header class="app-header">
-          <img src="/src/assets/vcquesabelogo.png" alt="vc que sabe" class="logo" />
+          <img src="${logoImage}" alt="vc que sabe" class="logo" />
           <h1>vc que sabe</h1>
         </header>
         <div id="result" class="result hidden"></div>
