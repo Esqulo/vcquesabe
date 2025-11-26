@@ -19,6 +19,15 @@ class WheelOfFortune {
 
   init() {
     document.querySelector('#app').innerHTML = `
+      <div class="ad-container ad-left" id="ad-left">
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-9791816249338036"
+             data-ad-slot="1195589215"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+      </div>
+      
       <div class="container">
         <header class="app-header">
           <img src="/src/assets/vcquesabelogo.png" alt="vc que sabe" class="logo" />
@@ -77,10 +86,52 @@ class WheelOfFortune {
           </div>
         </div>
       </div>
+      
+      <div class="ad-container ad-right" id="ad-right">
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-9791816249338036"
+             data-ad-slot="1195589215"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+      </div>
+      
+      <div class="ad-container ad-bottom" id="ad-bottom">
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-9791816249338036"
+             data-ad-slot="1195589215"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+      </div>
     `
 
     this.setupEventListeners()
     this.updateWheel()
+    this.loadAds()
+  }
+
+  loadAds() {
+    // Initialize Google AdSense ads
+    try {
+      const adLeft = document.getElementById('ad-left')
+      const adRight = document.getElementById('ad-right')
+      const adBottom = document.getElementById('ad-bottom')
+      
+      if (adLeft && window.adsbygoogle) {
+        (window.adsbygoogle = window.adsbygoogle || []).push({})
+      }
+      
+      if (adRight && window.adsbygoogle) {
+        (window.adsbygoogle = window.adsbygoogle || []).push({})
+      }
+      
+      if (adBottom && window.adsbygoogle) {
+        (window.adsbygoogle = window.adsbygoogle || []).push({})
+      }
+    } catch (e) {
+      console.error('Error loading ads:', e)
+    }
   }
 
   setupEventListeners() {
