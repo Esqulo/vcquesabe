@@ -98,10 +98,11 @@ class WheelOfFortune {
       </div>
       
       <div class="ad-container ad-bottom" id="ad-bottom">
+        <!-- mobile bottom -->
         <ins class="adsbygoogle"
              style="display:block"
              data-ad-client="ca-pub-9791816249338036"
-             data-ad-slot="1195589215"
+             data-ad-slot="5093104648"
              data-ad-format="auto"
              data-full-width-responsive="true"></ins>
       </div>
