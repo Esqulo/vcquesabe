@@ -5,6 +5,13 @@ class WheelOfFortune {
     this.items = []
     this.isSpinning = false
     this.rotation = 0
+    this.templates = {
+      pizzas: ['Margherita', 'Pepperoni', 'Quatro Queijos', 'Calabresa', 'Portuguesa', 'Frango com Catupiry', 'Napolitana', 'Bacon'],
+      sorvetes: ['Chocolate', 'Morango', 'Baunilha', 'Flocos', 'Creme', 'Limão', 'Maracujá', 'Açaí'],
+      cores: ['Vermelho', 'Azul', 'Verde', 'Amarelo', 'Roxo', 'Laranja', 'Rosa', 'Preto', 'Branco'],
+      lugares: ['Praia', 'Montanha', 'Cidade', 'Floresta', 'Deserto', 'Ilha', 'Campo', 'Parque'],
+      comidas: ['Pizza', 'Hambúrguer', 'Sushi', 'Taco', 'Lasanha', 'Churrasco', 'Pastel', 'Açaí', 'Coxinha', 'Batata Frita']
+    }
     this.init()
   }
 
@@ -31,6 +38,17 @@ class WheelOfFortune {
           </div>
 
           <div class="controls">
+            <div class="templates-section">
+              <h3>Sugestões:</h3>
+              <div class="templates-container">
+                <button class="template-btn" data-template="pizzas">🍕 Pizzas</button>
+                <button class="template-btn" data-template="sorvetes">🍦 Sorvetes</button>
+                <button class="template-btn" data-template="cores">🎨 Cores</button>
+                <button class="template-btn" data-template="lugares">🌍 Lugares</button>
+                <button class="template-btn" data-template="comidas">🍽️ Comidas</button>
+              </div>
+            </div>
+
             <div class="add-item-section">
               <input 
                 type="text" 
@@ -70,6 +88,23 @@ class WheelOfFortune {
     })
 
     spinBtn.addEventListener('click', () => this.spin())
+
+    // Template buttons
+    document.querySelectorAll('.template-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const templateName = e.target.getAttribute('data-template')
+        this.loadTemplate(templateName)
+      })
+    })
+  }
+
+  loadTemplate(templateName) {
+    if (this.templates[templateName]) {
+      this.items = [...this.templates[templateName]]
+      this.updateWheel()
+      this.updateItemsList()
+      this.updateSpinButton()
+    }
   }
 
   addItem() {
