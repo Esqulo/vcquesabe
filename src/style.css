@@ -155,8 +155,10 @@ h1 {
 
 .wheel-wrapper {
   position: relative;
-  width: 400px;
-  height: 400px;
+  width: 100%;
+  max-width: 400px;
+  aspect-ratio: 1 / 1;
+  height: auto;
 }
 
 .wheel {
@@ -444,6 +446,7 @@ h1 {
   }
 
   body {
+    padding: 1rem;
     padding-bottom: 100px;
   }
 
@@ -453,8 +456,9 @@ h1 {
   }
 
   .wheel-wrapper {
-    width: 300px;
-    height: 300px;
+    width: 100%;
+    max-width: 350px;
+    height: auto;
   }
 
   .app-header {
@@ -474,6 +478,7 @@ h1 {
   .controls {
     width: 100%;
     max-width: 100%;
+    min-width: auto;
   }
 
   .templates-container {
