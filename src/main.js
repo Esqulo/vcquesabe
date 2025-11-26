@@ -20,7 +20,10 @@ class WheelOfFortune {
   init() {
     document.querySelector('#app').innerHTML = `
       <div class="container">
-        <h1>vc que sabe</h1>
+        <header class="app-header">
+          <img src="/src/assets/vcquesabelogo.png" alt="vc que sabe" class="logo" />
+          <h1>vc que sabe</h1>
+        </header>
         <div id="result" class="result hidden"></div>
         
         <div class="main-content">
