@@ -36,11 +36,28 @@ body {
   gap: 2rem;
 }
 
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  width: 100%;
+  padding: 1rem 0;
+}
+
+.logo {
+  max-width: 120px;
+  height: auto;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
 h1 {
-  font-size: 4em;
+  font-size: 2.5em;
   line-height: 1.1;
-  margin: 0 0 1.5rem 0;
+  margin: 0;
   text-align: center;
+  flex: 0 1 auto;
   background: linear-gradient(135deg, #646cff, #535bf2, #ff6b6b);
   background-size: 200% 200%;
   -webkit-background-clip: text;
@@ -50,6 +67,7 @@ h1 {
   font-weight: 700;
   letter-spacing: -0.02em;
   text-transform: lowercase;
+  filter: drop-shadow(0 2px 4px rgba(100, 108, 255, 0.3));
 }
 
 @keyframes gradientShift {
@@ -362,8 +380,18 @@ h1 {
     height: 300px;
   }
 
+  .app-header {
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.5rem 0;
+  }
+
+  .logo {
+    max-width: 100px;
+  }
+
   h1 {
-    font-size: 2.5em;
+    font-size: 1.8em;
   }
 
   .controls {
