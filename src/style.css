@@ -132,6 +132,50 @@ h1 {
   gap: 2rem;
 }
 
+.templates-section {
+  background-color: #1a1a1a;
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 2px solid #646cff;
+}
+
+.templates-section h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.3em;
+  color: #646cff;
+}
+
+.templates-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.8rem;
+}
+
+.template-btn {
+  padding: 0.8em 1em;
+  border-radius: 8px;
+  border: 2px solid #646cff;
+  background-color: #1a1a1a;
+  color: white;
+  font-size: 0.95em;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.25s;
+  text-align: center;
+}
+
+.template-btn:hover {
+  background-color: #646cff;
+  border-color: #535bf2;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(100, 108, 255, 0.4);
+}
+
+.template-btn:active {
+  transform: translateY(0);
+}
+
 .add-item-section {
   display: flex;
   gap: 1rem;
@@ -304,6 +348,10 @@ h1 {
   .controls {
     width: 100%;
     max-width: 100%;
+  }
+
+  .templates-container {
+    grid-template-columns: 1fr;
   }
 
   .add-item-section {
