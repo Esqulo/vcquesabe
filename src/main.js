@@ -33,6 +33,9 @@ class WheelOfFortune {
         <header class="app-header">
           <img src="${logoImage}" alt="vc que sabe" class="logo" />
           <h1>vc que sabe</h1>
+          <button id="share-btn" class="share-btn" title="Compartilhar">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+          </button>
         </header>
         <div id="result" class="result hidden"></div>
         
@@ -88,6 +91,27 @@ class WheelOfFortune {
         </div>
       </div>
       
+      <div id="share-popup" class="share-popup hidden">
+        <div class="share-content">
+          <button id="close-share" class="close-share">×</button>
+          <h3>Compartilhar Roda</h3>
+          <div class="share-options">
+            <button class="share-option" data-platform="copy">
+              <span class="icon">📋</span> Copiar Link
+            </button>
+            <button class="share-option" data-platform="whatsapp">
+              <span class="icon">💚</span> WhatsApp
+            </button>
+            <button class="share-option" data-platform="twitter">
+              <span class="icon">🖤</span> X / Twitter
+            </button>
+            <button class="share-option" data-platform="instagram">
+              <span class="icon">📸</span> Instagram
+            </button>
+          </div>
+        </div>
+      </div>
+
       <div class="ad-container ad-right" id="ad-right">
         <ins class="adsbygoogle"
              style="display:block"
@@ -109,8 +133,10 @@ class WheelOfFortune {
     `
 
     this.setupEventListeners()
+    this.setupShareListeners()
     this.updateWheel()
     this.loadAds()
+    this.loadFromUrl()
   }
 
   loadAds() {
@@ -119,15 +145,15 @@ class WheelOfFortune {
       const adLeft = document.getElementById('ad-left')
       const adRight = document.getElementById('ad-right')
       const adBottom = document.getElementById('ad-bottom')
-      
+
       if (adLeft && window.adsbygoogle) {
         (window.adsbygoogle = window.adsbygoogle || []).push({})
       }
-      
+
       if (adRight && window.adsbygoogle) {
         (window.adsbygoogle = window.adsbygoogle || []).push({})
       }
-      
+
       if (adBottom && window.adsbygoogle) {
         (window.adsbygoogle = window.adsbygoogle || []).push({})
       }
@@ -159,12 +185,77 @@ class WheelOfFortune {
     })
   }
 
+  setupShareListeners() {
+    const shareBtn = document.getElementById('share-btn')
+    const sharePopup = document.getElementById('share-popup')
+    const closeShare = document.getElementById('close-share')
+    const shareOptions = document.querySelectorAll('.share-option')
+
+    shareBtn.addEventListener('click', () => {
+      sharePopup.classList.remove('hidden')
+    })
+
+    closeShare.addEventListener('click', () => {
+      sharePopup.classList.add('hidden')
+    })
+
+    sharePopup.addEventListener('click', (e) => {
+      if (e.target === sharePopup) {
+        sharePopup.classList.add('hidden')
+      }
+    })
+
+    shareOptions.forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const platform = btn.getAttribute('data-platform')
+        const url = window.location.href
+        const text = 'Confira minha roda da sorte no vc que sabe!'
+
+        switch (platform) {
+          case 'copy':
+            try {
+              await navigator.clipboard.writeText(url)
+              const originalText = btn.innerHTML
+              btn.innerHTML = '<span class="icon">✅</span> Copiado!'
+              setTimeout(() => {
+                btn.innerHTML = originalText
+              }, 2000)
+            } catch (err) {
+              console.error('Failed to copy:', err)
+            }
+            break
+          case 'whatsapp':
+            // Adding double newline and ensuring space to help WhatsApp recognize the link
+            window.open(`https://wa.me/?text=${encodeURIComponent(text + '\n\n' + url)}`, '_blank')
+            break
+          case 'twitter':
+            window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text + '\n')}`, '_blank')
+            break
+          case 'instagram':
+            try {
+              await navigator.clipboard.writeText(url)
+              const originalText = btn.innerHTML
+              btn.innerHTML = '<span class="icon">✅</span> Link Copiado!'
+              setTimeout(() => {
+                btn.innerHTML = originalText
+              }, 2000)
+              alert('Link copiado! Abra o Instagram para colar e compartilhar.')
+            } catch (err) {
+              console.error('Failed to copy:', err)
+            }
+            break
+        }
+      })
+    })
+  }
+
   loadTemplate(templateName) {
     if (this.templates[templateName]) {
       this.items = [...this.templates[templateName]]
       this.updateWheel()
       this.updateItemsList()
       this.updateSpinButton()
+      this.updateUrl()
     }
   }
 
@@ -181,6 +272,7 @@ class WheelOfFortune {
     this.updateWheel()
     this.updateItemsList()
     this.updateSpinButton()
+    this.updateUrl()
   }
 
   removeItem(item) {
@@ -188,11 +280,12 @@ class WheelOfFortune {
     this.updateWheel()
     this.updateItemsList()
     this.updateSpinButton()
+    this.updateUrl()
   }
 
   updateItemsList() {
     const container = document.querySelector('#items-container')
-    
+
     if (this.items.length === 0) {
       container.innerHTML = '<p class="empty-message">Nenhum item ainda. Adicione alguns itens para começar!</p>'
       return
@@ -222,7 +315,7 @@ class WheelOfFortune {
   updateWheel() {
     const wheel = document.querySelector('#wheel')
     const segmentsGroup = document.querySelector('#wheel-segments')
-    
+
     if (this.items.length === 0) {
       segmentsGroup.innerHTML = ''
       return
@@ -289,12 +382,12 @@ class WheelOfFortune {
   generateColors(count) {
     const colors = []
     const hueStep = 360 / count
-    
+
     for (let i = 0; i < count; i++) {
       const hue = (i * hueStep) % 360
       colors.push(`hsl(${hue}, 70%, 50%)`)
     }
-    
+
     return colors
   }
 
@@ -331,6 +424,27 @@ class WheelOfFortune {
       resultDiv.textContent = `🎉 ${selectedItem} 🎉`
       resultDiv.classList.remove('hidden')
     }, 4000)
+  }
+
+  updateUrl() {
+    const url = new URL(window.location)
+    if (this.items.length > 0) {
+      url.searchParams.set('items', this.items.join(','))
+    } else {
+      url.searchParams.delete('items')
+    }
+    window.history.replaceState({}, '', url)
+  }
+
+  loadFromUrl() {
+    const urlParams = new URLSearchParams(window.location.search)
+    const itemsParam = urlParams.get('items')
+    if (itemsParam) {
+      this.items = itemsParam.split(',').filter(item => item.trim() !== '')
+      this.updateWheel()
+      this.updateItemsList()
+      this.updateSpinButton()
+    }
   }
 }
 
