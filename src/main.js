@@ -111,6 +111,7 @@ class WheelOfFortune {
     this.setupEventListeners()
     this.updateWheel()
     this.loadAds()
+    this.loadFromUrl()
   }
 
   loadAds() {
@@ -119,15 +120,15 @@ class WheelOfFortune {
       const adLeft = document.getElementById('ad-left')
       const adRight = document.getElementById('ad-right')
       const adBottom = document.getElementById('ad-bottom')
-      
+
       if (adLeft && window.adsbygoogle) {
         (window.adsbygoogle = window.adsbygoogle || []).push({})
       }
-      
+
       if (adRight && window.adsbygoogle) {
         (window.adsbygoogle = window.adsbygoogle || []).push({})
       }
-      
+
       if (adBottom && window.adsbygoogle) {
         (window.adsbygoogle = window.adsbygoogle || []).push({})
       }
@@ -165,6 +166,7 @@ class WheelOfFortune {
       this.updateWheel()
       this.updateItemsList()
       this.updateSpinButton()
+      this.updateUrl()
     }
   }
 
@@ -181,6 +183,7 @@ class WheelOfFortune {
     this.updateWheel()
     this.updateItemsList()
     this.updateSpinButton()
+    this.updateUrl()
   }
 
   removeItem(item) {
@@ -188,11 +191,12 @@ class WheelOfFortune {
     this.updateWheel()
     this.updateItemsList()
     this.updateSpinButton()
+    this.updateUrl()
   }
 
   updateItemsList() {
     const container = document.querySelector('#items-container')
-    
+
     if (this.items.length === 0) {
       container.innerHTML = '<p class="empty-message">Nenhum item ainda. Adicione alguns itens para começar!</p>'
       return
@@ -222,7 +226,7 @@ class WheelOfFortune {
   updateWheel() {
     const wheel = document.querySelector('#wheel')
     const segmentsGroup = document.querySelector('#wheel-segments')
-    
+
     if (this.items.length === 0) {
       segmentsGroup.innerHTML = ''
       return
@@ -289,12 +293,12 @@ class WheelOfFortune {
   generateColors(count) {
     const colors = []
     const hueStep = 360 / count
-    
+
     for (let i = 0; i < count; i++) {
       const hue = (i * hueStep) % 360
       colors.push(`hsl(${hue}, 70%, 50%)`)
     }
-    
+
     return colors
   }
 
@@ -331,6 +335,27 @@ class WheelOfFortune {
       resultDiv.textContent = `🎉 ${selectedItem} 🎉`
       resultDiv.classList.remove('hidden')
     }, 4000)
+  }
+
+  updateUrl() {
+    const url = new URL(window.location)
+    if (this.items.length > 0) {
+      url.searchParams.set('items', this.items.join(','))
+    } else {
+      url.searchParams.delete('items')
+    }
+    window.history.replaceState({}, '', url)
+  }
+
+  loadFromUrl() {
+    const urlParams = new URLSearchParams(window.location.search)
+    const itemsParam = urlParams.get('items')
+    if (itemsParam) {
+      this.items = itemsParam.split(',').filter(item => item.trim() !== '')
+      this.updateWheel()
+      this.updateItemsList()
+      this.updateSpinButton()
+    }
   }
 }
 
