@@ -70,6 +70,13 @@ class WheelOfFortune {
               </div>
             </div>
 
+            <div id="saved-templates-section" class="saved-templates-section hidden">
+              <h3>Meus Modelos:</h3>
+              <div id="saved-templates-container" class="templates-container">
+                <!-- Saved templates will be injected here -->
+              </div>
+            </div>
+
             <div class="add-item-section">
               <input 
                 type="text" 
@@ -87,6 +94,13 @@ class WheelOfFortune {
                 ${this.items.length === 0 ? '<p class="empty-message">Nenhum item ainda. Adicione alguns itens para começar!</p>' : ''}
               </div>
             </div>
+            
+            <button id="save-template-btn" class="save-template-btn" title="Salvar como modelo">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 0-1 1v7.293l2.646-2.647a.5.5 0 0 1 .708.708l-3.5 3.5a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L7.5 9.293V2a2 2 0 0 1 2-2H14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h2.5a.5.5 0 0 1 0 1H2z"/>
+              </svg>
+              Salvar como Modelo
+            </button>
           </div>
         </div>
       </div>
@@ -108,6 +122,23 @@ class WheelOfFortune {
             <button class="share-option" data-platform="instagram">
               <span class="icon">📸</span> Instagram
             </button>
+          </div>
+        </div>
+      </div>
+
+      <div id="save-template-popup" class="share-popup hidden">
+        <div class="share-content">
+          <button id="close-save-template" class="close-share">×</button>
+          <h3>Salvar Modelo</h3>
+          <div class="save-template-form">
+            <input 
+              type="text" 
+              id="template-name-input" 
+              placeholder="Nome do modelo..." 
+              class="template-name-input"
+              maxlength="30"
+            />
+            <button id="confirm-save-template" class="action-btn">Salvar</button>
           </div>
         </div>
       </div>
@@ -134,9 +165,11 @@ class WheelOfFortune {
 
     this.setupEventListeners()
     this.setupShareListeners()
+    this.setupSaveTemplateListeners()
     this.updateWheel()
     this.loadAds()
     this.loadFromUrl()
+    this.loadSavedTemplates()
   }
 
   loadAds() {
@@ -183,6 +216,121 @@ class WheelOfFortune {
         this.loadTemplate(templateName)
       })
     })
+
+    // Save template button
+    const saveBtn = document.getElementById('save-template-btn')
+    if (saveBtn) {
+      saveBtn.addEventListener('click', () => this.saveTemplate())
+    }
+  }
+
+  saveTemplate() {
+    if (this.items.length === 0) {
+      alert('Adicione itens à roda antes de salvar!')
+      return
+    }
+
+    const popup = document.getElementById('save-template-popup')
+    const input = document.getElementById('template-name-input')
+    popup.classList.remove('hidden')
+    input.value = ''
+    input.focus()
+  }
+
+  confirmSaveTemplate() {
+    const input = document.getElementById('template-name-input')
+    const name = input.value.trim()
+
+    if (!name) return
+
+    const savedTemplates = JSON.parse(localStorage.getItem('vcquesabe_templates') || '{}')
+    savedTemplates[name] = this.items
+    localStorage.setItem('vcquesabe_templates', JSON.stringify(savedTemplates))
+
+    this.loadSavedTemplates()
+
+    // Close popup
+    const popup = document.getElementById('save-template-popup')
+    popup.classList.add('hidden')
+  }
+
+  setupSaveTemplateListeners() {
+    const popup = document.getElementById('save-template-popup')
+    const closeBtn = document.getElementById('close-save-template')
+    const confirmBtn = document.getElementById('confirm-save-template')
+    const input = document.getElementById('template-name-input')
+
+    closeBtn.addEventListener('click', () => {
+      popup.classList.add('hidden')
+    })
+
+    popup.addEventListener('click', (e) => {
+      if (e.target === popup) {
+        popup.classList.add('hidden')
+      }
+    })
+
+    confirmBtn.addEventListener('click', () => {
+      this.confirmSaveTemplate()
+    })
+
+    input.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        this.confirmSaveTemplate()
+      }
+    })
+  }
+
+  loadSavedTemplates() {
+    const savedTemplates = JSON.parse(localStorage.getItem('vcquesabe_templates') || '{}')
+    const container = document.getElementById('saved-templates-container')
+    const section = document.getElementById('saved-templates-section')
+
+    if (Object.keys(savedTemplates).length === 0) {
+      section.classList.add('hidden')
+      return
+    }
+
+    section.classList.remove('hidden')
+    container.innerHTML = ''
+
+    Object.entries(savedTemplates).forEach(([name, items]) => {
+      const btnWrapper = document.createElement('div')
+      btnWrapper.className = 'saved-template-wrapper'
+
+      const btn = document.createElement('button')
+      btn.className = 'template-btn saved-template-btn'
+      btn.textContent = name
+      btn.addEventListener('click', () => {
+        this.items = [...items]
+        this.updateWheel()
+        this.updateItemsList()
+        this.updateSpinButton()
+        this.updateUrl()
+      })
+
+      const deleteBtn = document.createElement('button')
+      deleteBtn.className = 'delete-template-btn'
+      deleteBtn.innerHTML = '×'
+      deleteBtn.title = 'Excluir modelo'
+      deleteBtn.addEventListener('click', (e) => {
+        e.stopPropagation()
+        if (confirm(`Tem certeza que deseja excluir o modelo "${name}"?`)) {
+          this.deleteTemplate(name)
+        }
+      })
+
+      btnWrapper.appendChild(btn)
+      btnWrapper.appendChild(deleteBtn)
+      container.appendChild(btnWrapper)
+    })
+  }
+
+  deleteTemplate(name) {
+    const savedTemplates = JSON.parse(localStorage.getItem('vcquesabe_templates') || '{}')
+    delete savedTemplates[name]
+    localStorage.setItem('vcquesabe_templates', JSON.stringify(savedTemplates))
+    this.loadSavedTemplates()
   }
 
   setupShareListeners() {
